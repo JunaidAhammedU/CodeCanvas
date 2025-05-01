@@ -6,7 +6,7 @@ export const CodeEditor: FC = () => {
     const { code, setCode } = useEditorStore();
 
     return (
-        <div className="h-[60vh] w-full rounded-lg border border-border">
+        <div className="h-full w-full">
             <Editor
                 height="100%"
                 defaultLanguage="javascript"
@@ -17,9 +17,22 @@ export const CodeEditor: FC = () => {
                     minimap: { enabled: false },
                     fontSize: 14,
                     lineNumbers: 'on',
-                    roundedSelection: true,
+                    roundedSelection: false,
                     scrollBeyondLastLine: false,
                     automaticLayout: true,
+                    padding: { top: 16 },
+                    lineHeight: 1.6,
+                    fontFamily: 'Consolas, "Courier New", monospace',
+                    folding: true,
+                    glyphMargin: true,
+                    contextmenu: true,
+                    cursorStyle: 'line',
+                    renderLineHighlight: 'all',
+                    scrollbar: {
+                        useShadows: false,
+                        verticalScrollbarSize: 10,
+                        horizontalScrollbarSize: 10
+                    }
                 }}
             />
         </div>
