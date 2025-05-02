@@ -5,7 +5,7 @@ import { ThemeProvider } from 'next-themes';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'JavaScript Online Compiler',
+  title: 'Code Canvas',
   description: 'A modern JavaScript compiler with real-time output',
 };
 
