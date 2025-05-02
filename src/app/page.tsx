@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, Code2, Sparkle, Zap } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ThemeToggle } from '@/components/ThemeToggle';
 
 export default function Home() {
@@ -65,11 +66,12 @@ export default function Home() {
             whileHover={{ scale: 1.02 }}
             className="relative rounded-xl overflow-hidden bg-card p-6 border shadow-lg"
           >
-            <div className="aspect-square rounded-lg overflow-hidden mb-4">
-              <img
+            <div className="aspect-square rounded-lg overflow-hidden mb-4 relative">
+              <Image
                 src="https://ellipsiseducation.com/wp-content/uploads/2023/02/javascript-736400_1280.png"
                 alt="JavaScript"
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
               />
             </div>
             <h3 className="text-xl font-semibold mb-2">JavaScript</h3>
@@ -83,11 +85,12 @@ export default function Home() {
             whileHover={{ scale: 1.02 }}
             className="relative rounded-xl overflow-hidden bg-card p-6 border shadow-lg"
           >
-            <div className="aspect-square rounded-lg overflow-hidden mb-4">
-              <img
+            <div className="aspect-square rounded-lg overflow-hidden mb-4 relative">
+              <Image
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png"
                 alt="TypeScript"
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
               />
             </div>
             <h3 className="text-xl font-semibold mb-2">TypeScript</h3>
@@ -101,11 +104,12 @@ export default function Home() {
             whileHover={{ scale: 1.02 }}
             className="relative rounded-xl overflow-hidden bg-card p-6 border shadow-lg"
           >
-            <div className="aspect-square rounded-lg overflow-hidden mb-4">
-              <img
+            <div className="aspect-square rounded-lg overflow-hidden mb-4 relative">
+              <Image
                 src="https://blog.accredian.com/wp-content/uploads/2019/04/Python-logo.jpg"
                 alt="Python"
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
               />
             </div>
             <h3 className="text-xl font-semibold mb-2">Python</h3>

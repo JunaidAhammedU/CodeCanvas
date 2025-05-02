@@ -3,15 +3,15 @@ const executeCode = (code: string) => {
         // Override console methods to capture output
         const outputs: string[] = [];
         const console = {
-            log: (...args: any[]) => {
+            log: (...args: unknown[]) => {
                 outputs.push(args.map(arg =>
                     typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
                 ).join(' '));
             },
-            error: (...args: any[]) => {
+            error: (...args: unknown[]) => {
                 outputs.push(`Error: ${args.join(' ')}`);
             },
-            warn: (...args: any[]) => {
+            warn: (...args: unknown[]) => {
                 outputs.push(`Warning: ${args.join(' ')}`);
             }
         };
@@ -20,11 +20,12 @@ const executeCode = (code: string) => {
         new Function('console', code)(console);
 
         return { success: true, output: outputs };
-    } catch (error: any) {
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
         return {
             success: false,
-            error: error.message,
-            output: [`Error: ${error.message}`]
+            error: errorMessage,
+            output: [`Error: ${errorMessage}`]
         };
     }
 };

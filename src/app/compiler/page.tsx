@@ -36,15 +36,16 @@ export default function CompilerPage() {
             const worker = new Worker(new URL('../../lib/code-worker.ts', import.meta.url));
 
             worker.onmessage = (e) => {
-                const { success, output, error } = e.data;
-                setOutput(output);
+                const { output, error } = e.data;
+                setOutput(error ? [`Error: ${error}`] : output);
                 setIsRunning(false);
                 worker.terminate();
             };
 
             worker.postMessage(code);
-        } catch (error: any) {
-            setOutput([`Error: ${error.message}`]);
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            setOutput([`Error: ${errorMessage}`]);
             setIsRunning(false);
         }
     }, [code, setOutput, setIsRunning, clearOutput]);
