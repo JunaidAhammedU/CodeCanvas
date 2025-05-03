@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import { useEditorStore } from '@/lib/store';
 import { useTheme } from 'next-themes';
