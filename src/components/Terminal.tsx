@@ -6,14 +6,14 @@ export const Terminal: FC = () => {
     const { output } = useEditorStore();
 
     return (
-        <div className="h-full bg-[#1e1e1e] text-white font-mono text-sm overflow-auto">
+        <div className="h-full bg-background text-foreground font-mono text-sm overflow-auto">
             <motion.div
                 className="min-h-full p-4 space-y-2"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
             >
                 {output.length === 0 ? (
-                    <div className="text-gray-500 italic">
+                    <div className="text-muted-foreground italic">
                         Output will appear here when you run your code...
                     </div>
                 ) : (
@@ -26,17 +26,17 @@ export const Terminal: FC = () => {
                             className="flex items-start space-x-2 group"
                         >
                             <span className={`
-                                ${line.startsWith('Error:') ? 'text-red-400' :
-                                    line.startsWith('Warning:') ? 'text-yellow-400' :
-                                        'text-green-400'}
+                                ${line.startsWith('Error:') ? 'text-destructive' :
+                                    line.startsWith('Warning:') ? 'text-warning' :
+                                        'text-success'}
                                 opacity-60 group-hover:opacity-100 transition-opacity
                             `}>
                                 {'>'}
                             </span>
                             <span className={`
-                                ${line.startsWith('Error:') ? 'text-red-400' :
-                                    line.startsWith('Warning:') ? 'text-yellow-400' :
-                                        'text-white'}
+                                ${line.startsWith('Error:') ? 'text-destructive' :
+                                    line.startsWith('Warning:') ? 'text-warning' :
+                                        'text-foreground'}
                                 opacity-90 group-hover:opacity-100 transition-opacity whitespace-pre-wrap
                             `}>
                                 {line}
