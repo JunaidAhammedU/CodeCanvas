@@ -5,9 +5,11 @@ import { CodeEditor } from '@/components/CodeEditor';
 import { Terminal } from '@/components/Terminal';
 import { useEditorStore } from '@/lib/store';
 import { motion } from 'framer-motion';
-import { PlayIcon, Files, Settings, Search, GitBranch } from 'lucide-react';
+import { PlayIcon, Trash2, Terminal as TerminalIcon, Code2, Home } from 'lucide-react';
 import { Resizer } from '@/components/Resizer';
 import { TerminalPositionToggle } from '@/components/TerminalPositionToggle';
+import Link from 'next/link';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 export default function CompilerPage() {
     const {
@@ -22,10 +24,15 @@ export default function CompilerPage() {
     } = useEditorStore();
 
     const handleResize = useCallback((delta: number) => {
-        const newSize = terminalPosition === 'bottom'
-            ? terminalSize - (delta / window.innerHeight) * 100
-            : terminalSize - (delta / window.innerWidth) * 100;
-        setTerminalSize(Math.min(Math.max(newSize, 10), 90));
+        const containerSize = terminalPosition === 'bottom'
+            ? window.innerHeight
+            : window.innerWidth;
+
+        const pixelSize = (terminalSize / 100) * containerSize;
+        const newPixelSize = Math.min(Math.max(pixelSize + delta, 100), containerSize * 0.9);
+        const newPercentage = (newPixelSize / containerSize) * 100;
+
+        setTerminalSize(Math.min(Math.max(newPercentage, 10), 90));
     }, [terminalPosition, terminalSize, setTerminalSize]);
 
     const runCode = useCallback(async () => {
@@ -55,19 +62,31 @@ export default function CompilerPage() {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="relative h-full"
+                className="relative h-full bg-[#1e1e1e] rounded-lg shadow-lg overflow-hidden"
+                style={{ contain: 'strict' }}
             >
+                <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+                    <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={clearOutput}
+                        className="flex items-center space-x-2 bg-gray-700 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-gray-600 transition-colors"
+                    >
+                        <Trash2 className="w-4 h-4" />
+                        <span>Clear</span>
+                    </motion.button>
+                    <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={runCode}
+                        disabled={isRunning}
+                        className="flex items-center space-x-2 bg-blue-600 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                        <PlayIcon className="w-4 h-4" />
+                        <span>{isRunning ? 'Running...' : 'Run Code'}</span>
+                    </motion.button>
+                </div>
                 <CodeEditor />
-                <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={runCode}
-                    disabled={isRunning}
-                    className="absolute top-4 right-4 flex items-center space-x-2 bg-blue-500 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed z-10"
-                >
-                    <PlayIcon className="w-4 h-4" />
-                    <span>Run Code</span>
-                </motion.button>
             </motion.div>
         );
 
@@ -75,18 +94,19 @@ export default function CompilerPage() {
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="border-[#3c3c3c] flex flex-col"
-                style={{
-                    borderLeft: terminalPosition === 'right' ? '1px solid' : undefined,
-                    borderRight: terminalPosition === 'left' ? '1px solid' : undefined,
-                    borderTop: terminalPosition === 'bottom' ? '1px solid' : undefined,
-                }}
+                className="bg-[#1e1e1e] rounded-lg shadow-lg overflow-hidden flex flex-col h-full"
+                style={{ contain: 'strict' }}
             >
-                <div className="bg-[#1e1e1e] h-9 border-b border-[#3c3c3c] flex items-center justify-between px-4">
-                    <span className="text-white text-sm">Terminal</span>
-                    <TerminalPositionToggle />
+                <div className="bg-gray-800 h-10 flex items-center justify-between px-4">
+                    <div className="flex items-center gap-2">
+                        <TerminalIcon className="w-4 h-4 text-gray-400" />
+                        <span className="text-white text-sm font-medium">Output</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <TerminalPositionToggle />
+                    </div>
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 border border-gray-800">
                     <Terminal />
                 </div>
             </motion.div>
@@ -94,41 +114,38 @@ export default function CompilerPage() {
 
         if (terminalPosition === 'bottom') {
             return (
-                <div className="flex-1 flex flex-col">
-                    <div style={{ height: `${100 - terminalSize}%` }}>
+                <div className="flex-1 flex flex-col gap-2 p-2 h-[calc(100vh-3.5rem)] overflow-hidden">
+                    <div style={{ height: `${100 - terminalSize}%`, minHeight: 0 }}>
                         {editorSection}
                     </div>
                     <Resizer onResize={handleResize} />
-                    <div style={{ height: `${terminalSize}%` }}>
+                    <div style={{ height: `${terminalSize}%`, minHeight: 0 }}>
                         {terminalSection}
                     </div>
                 </div>
             );
         }
 
-        const terminalWidth = `${terminalSize}%`;
-        const editorWidth = `${100 - terminalSize}%`;
-
         return (
-            <div className="flex-1 flex">
+            <div className="flex-1 flex gap-2 p-2 h-[calc(100vh-3.5rem)] overflow-hidden">
                 {terminalPosition === 'left' && (
                     <>
-                        <div style={{ width: terminalWidth }}>
+                        <div style={{ width: `${terminalSize}%`, minWidth: 0 }}>
                             {terminalSection}
                         </div>
                         <Resizer onResize={handleResize} />
-                        <div style={{ width: editorWidth }}>
+                        <div style={{ width: `${100 - terminalSize}%`, minWidth: 0 }}>
                             {editorSection}
                         </div>
                     </>
                 )}
                 {terminalPosition === 'right' && (
                     <>
-                        <div style={{ width: editorWidth }}>
+                        <div style={{ width: `${100 - terminalSize}%`, minWidth: 0 }}>
                             {editorSection}
                         </div>
                         <Resizer onResize={handleResize} />
-                        <div style={{ width: terminalWidth }}>
+                        <div style={{ width: `${terminalSize}%`, minWidth: 0 }}>
                             {terminalSection}
                         </div>
                     </>
@@ -138,34 +155,24 @@ export default function CompilerPage() {
     };
 
     return (
-        <div className="flex h-screen bg-[#1e1e1e]">
-            {/* VS Code-like Sidebar */}
-            <div className="w-12 bg-[#252526] flex flex-col items-center py-4 border-r border-[#3c3c3c]">
-                <button className="p-2 text-gray-400 hover:text-white mb-4">
-                    <Files className="w-6 h-6" />
-                </button>
-                <button className="p-2 text-gray-400 hover:text-white mb-4">
-                    <Search className="w-6 h-6" />
-                </button>
-                <button className="p-2 text-gray-400 hover:text-white mb-4">
-                    <GitBranch className="w-6 h-6" />
-                </button>
-                <button className="p-2 text-gray-400 hover:text-white mt-auto">
-                    <Settings className="w-6 h-6" />
-                </button>
-            </div>
-
-            <div className="flex-1 flex flex-col">
-                {/* Tab Bar */}
-                <div className="h-9 bg-[#252526] flex items-center px-4 border-b border-[#3c3c3c]">
-                    <div className="px-3 py-1 bg-[#1e1e1e] text-white text-sm border-t border-blue-500">
-                        index.js
-                    </div>
+        <div className="h-screen flex flex-col bg-gray-900">
+            <div className="h-14 border-b border-gray-800 flex items-center justify-between px-6 flex-shrink-0">
+                <div className="flex items-center gap-2">
+                    <Code2 className="w-6 h-6 text-blue-500" />
+                    <span className="text-lg font-semibold text-white">CodeCanvas</span>
                 </div>
-
-                {/* Main Content */}
-                {renderContent()}
+                <div className="flex items-center gap-4">
+                    <ThemeToggle />
+                    <Link
+                        href="/"
+                        className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+                    >
+                        <Home className="w-5 h-5" />
+                        <span className="text-sm">Home</span>
+                    </Link>
+                </div>
             </div>
+            {renderContent()}
         </div>
     );
 }

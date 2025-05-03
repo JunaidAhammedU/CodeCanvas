@@ -1,5 +1,6 @@
-import { FC, MouseEvent as ReactMouseEvent, useCallback, useState, useEffect } from 'react';
+import { FC, MouseEvent as ReactMouseEvent, useCallback, useState, useEffect, useRef } from 'react';
 import { useEditorStore } from '@/lib/store';
+import { motion } from 'framer-motion';
 
 interface ResizerProps {
     onResize: (delta: number) => void;
@@ -9,44 +10,80 @@ export const Resizer: FC<ResizerProps> = ({ onResize }) => {
     const [isDragging, setIsDragging] = useState(false);
     const { terminalPosition } = useEditorStore();
     const isHorizontal = terminalPosition === 'left' || terminalPosition === 'right';
+    const lastPositionRef = useRef<{ x: number; y: number } | null>(null);
+    const frameRef = useRef<number | null>(null);
 
     const handleMouseDown = useCallback((e: ReactMouseEvent) => {
         setIsDragging(true);
+        lastPositionRef.current = { x: e.clientX, y: e.clientY };
         e.preventDefault();
     }, []);
 
     const handleMouseUp = useCallback(() => {
         setIsDragging(false);
+        lastPositionRef.current = null;
+        if (frameRef.current) {
+            cancelAnimationFrame(frameRef.current);
+        }
     }, []);
 
     const handleMouseMove = useCallback((e: globalThis.MouseEvent) => {
-        if (isDragging) {
-            onResize(isHorizontal ? e.movementX : e.movementY);
+        if (!isDragging || !lastPositionRef.current) return;
+
+        if (frameRef.current) {
+            cancelAnimationFrame(frameRef.current);
         }
-    }, [isDragging, onResize, isHorizontal]);
+
+        frameRef.current = requestAnimationFrame(() => {
+            if (!lastPositionRef.current) return;
+
+            let delta = isHorizontal
+                ? e.clientX - lastPositionRef.current.x
+                : e.clientY - lastPositionRef.current.y;
+
+            // Invert delta for right and bottom positions
+            if (terminalPosition === 'right' || terminalPosition === 'bottom') {
+                delta = -delta;
+            }
+
+            lastPositionRef.current = { x: e.clientX, y: e.clientY };
+            onResize(delta);
+        });
+    }, [isDragging, isHorizontal, onResize, terminalPosition]);
 
     useEffect(() => {
         if (isDragging) {
             window.addEventListener('mousemove', handleMouseMove);
             window.addEventListener('mouseup', handleMouseUp);
+            document.body.style.userSelect = 'none';
         }
 
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseup', handleMouseUp);
+            document.body.style.userSelect = '';
+            if (frameRef.current) {
+                cancelAnimationFrame(frameRef.current);
+            }
         };
     }, [isDragging, handleMouseMove, handleMouseUp]);
 
     return (
-        <div
-            className={`bg-[#3c3c3c] hover:bg-blue-500/50 flex items-center justify-center
-                ${isHorizontal ? 'w-2 cursor-ew-resize' : 'h-2 cursor-ns-resize'}`}
+        <motion.div
+            className={`flex items-center justify-center transition-colors select-none
+                ${isHorizontal
+                    ? 'w-1 cursor-ew-resize hover:w-2'
+                    : 'h-1 cursor-ns-resize hover:h-2'}`}
             onMouseDown={handleMouseDown}
+            whileHover={{ scale: 1.5 }}
         >
             <div
-                className={`bg-[#525252] hover:bg-blue-500 rounded-full
-                    ${isHorizontal ? 'h-8 w-1' : 'w-8 h-1'}`}
+                className={`bg-gray-600 rounded-full transition-all duration-200
+                    ${isDragging ? 'bg-blue-500' : 'hover:bg-blue-500/50'}
+                    ${isHorizontal
+                        ? 'h-20 w-0.5'
+                        : 'w-20 h-0.5'}`}
             />
-        </div>
+        </motion.div>
     );
 };

@@ -105,10 +105,9 @@ export default function Home() {
             className="relative rounded-xl overflow-hidden bg-card p-6 border shadow-lg"
           >
             <div className="aspect-square rounded-lg overflow-hidden mb-4 relative">
-              <Image
+              <img
                 src="https://blog.accredian.com/wp-content/uploads/2019/04/Python-logo.jpg"
                 alt="Python"
-                fill
                 className="object-cover"
               />
             </div>

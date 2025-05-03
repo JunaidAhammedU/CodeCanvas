@@ -2,34 +2,32 @@ import { FC } from 'react';
 import Editor from '@monaco-editor/react';
 import { useEditorStore } from '@/lib/store';
 
-export const CodeEditor: FC = () => {
+export const CodeEditor = () => {
     const { code, setCode } = useEditorStore();
 
     return (
-        <div className="h-full w-full">
+        <div className="h-full w-full overflow-hidden">
             <Editor
                 height="100%"
+                width="100%"
                 defaultLanguage="javascript"
+                defaultValue={code}
                 theme="vs-dark"
-                value={code}
                 onChange={(value) => setCode(value || '')}
                 options={{
-                    minimap: { enabled: false },
                     fontSize: 14,
-                    lineNumbers: 'on',
-                    roundedSelection: false,
+                    minimap: { enabled: false },
                     scrollBeyondLastLine: false,
-                    automaticLayout: true,
-                    padding: { top: 16 },
-                    lineHeight: 1.6,
-                    fontFamily: 'Consolas, "Courier New", monospace',
+                    lineNumbers: 'on',
+                    glyphMargin: false,
                     folding: true,
-                    glyphMargin: true,
-                    contextmenu: true,
-                    cursorStyle: 'line',
-                    renderLineHighlight: 'all',
+                    lineDecorationsWidth: 0,
+                    lineNumbersMinChars: 3,
+                    automaticLayout: true,
+                    padding: { top: 15 },
                     scrollbar: {
-                        useShadows: false,
+                        vertical: 'visible',
+                        horizontal: 'visible',
                         verticalScrollbarSize: 10,
                         horizontalScrollbarSize: 10
                     }
