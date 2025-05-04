@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CodeCanvas
 
-## Getting Started
+Visit the live site: [CodeCanvas](http://jscode-canvas.vercel.app/)
 
-First, run the development server:
+CodeCanvas is a modern, web-based code editor that allows you to write and execute JavaScript code in real-time. Built with cutting-edge web technologies, it provides a seamless development experience with features like syntax highlighting, theme switching, and live code execution.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Features
+
+- 🔥 Real-time code execution
+- 💡 Syntax highlighting
+- 🌓 Light/Dark theme support
+- ⌨️ Monaco Editor integration (same as VS Code)
+- ⚡ Fast compilation and execution
+- 📱 Responsive design
+- ⚙️ Customizable editor settings
+- 🔧 Web Worker-based code execution for safety
+
+## Technology Stack
+
+### Core Technologies
+- **Next.js 14+** - React framework with App Router
+- **TypeScript** - For type-safe code
+- **React** - UI library
+- **Tailwind CSS** - For styling
+
+### Key Libraries and Tools
+- **@monaco-editor/react** - VS Code's editor component
+- **next-themes** - Theme management
+- **Web Workers** - For safe code execution
+- **Zustand** - State management
+
+## Project Structure
+
+```
+src/
+├── app/              # Next.js app router pages
+├── components/       # React components
+│   ├── ui/          # UI components
+│   ├── CodeEditor   # Monaco editor wrapper
+│   ├── Terminal     # Output terminal
+│   └── ...
+└── lib/             # Utilities and store
+    ├── code-worker  # Web Worker for code execution
+    ├── store        # Zustand store
+    └── utils        # Helper functions
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Code Execution
+CodeCanvas uses Web Workers to safely execute JavaScript code in a separate thread, preventing malicious code from affecting the main application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Editor Features
+- Syntax highlighting
+- Auto-completion
+- Error highlighting
+- Multiple theme support
+- Custom keybindings (Ctrl/Cmd + S to run code)
+- Adjustable font size
+- Customizable editor settings
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Theme Support
+The application supports both light and dark themes, automatically syncing with your system preferences while allowing manual override.
 
-## Learn More
+## Contributing
 
-To learn more about Next.js, take a look at the following resources:
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+[MIT License](LICENSE)
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Built with ❤️ using Next.js and modern web technologies.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Author
+
+Built by Junaid Ahammed
+
+Connect with me:
+- GitHub: [JunaidAhammedU](https://github.com/JunaidAhammedU)
+- LinkedIn: [Junaid Ahammed](https://www.linkedin.com/in/junaid-ahammed/)
