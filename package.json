@@ -31,6 +31,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-resizable-panels": "^2.1.9",
+    "react-use-measure": "^2.1.7",
     "tailwind-merge": "^3.2.0",
     "web-worker": "^1.5.0",
     "zustand": "^5.0.3"

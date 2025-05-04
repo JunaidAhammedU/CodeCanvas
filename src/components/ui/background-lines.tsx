@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import React from "react";
+import { CodeIconsPattern } from "./code-icons-pattern";
 
 export const BackgroundLines = ({
     children,
@@ -17,10 +18,11 @@ export const BackgroundLines = ({
     return (
         <div
             className={cn(
-                "h-[20rem] md:h-screen w-full bg-white dark:bg-black",
+                "h-[20rem] md:h-screen w-full bg-white dark:bg-black relative overflow-hidden",
                 className
             )}
         >
+            <CodeIconsPattern />
             <SVG svgOptions={svgOptions} />
             {children}
         </div>
