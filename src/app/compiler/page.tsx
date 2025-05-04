@@ -5,11 +5,12 @@ import { CodeEditor } from '@/components/CodeEditor';
 import { Terminal } from '@/components/Terminal';
 import { useEditorStore } from '@/lib/store';
 import { motion } from 'framer-motion';
-import { PlayIcon, Trash2, Terminal as TerminalIcon, Code2, Home } from 'lucide-react';
+import { PlayIcon, Trash2, Terminal as TerminalIcon, Home } from 'lucide-react';
 import { Resizer } from '@/components/Resizer';
 import { TerminalPositionToggle } from '@/components/TerminalPositionToggle';
 import Link from 'next/link';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import Image from 'next/image';
 
 export default function CompilerPage() {
     const {
@@ -157,10 +158,10 @@ export default function CompilerPage() {
     return (
         <div className="h-screen flex flex-col bg-background">
             <div className="h-14 border-b border-border flex items-center justify-between px-6 flex-shrink-0">
-                <div className="flex items-center gap-2">
-                    <Code2 className="w-6 h-6 text-primary" />
+                <Link href="/" className="flex items-center gap-2">
+                    <Image src="/chevron.png" alt="Code Canvas Logo" width={24} height={24} />
                     <span className="text-lg font-semibold text-foreground">CodeCanvas</span>
-                </div>
+                </Link>
                 <div className="flex items-center gap-4">
                     <ThemeToggle />
                     <Link
