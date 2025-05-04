@@ -21,7 +21,7 @@ export default function Home() {
         </p>
         <div className="flex justify-center gap-4">
           <Link href="/compiler">
-            <Button className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-8 py-2 rounded-lg transform transition-all hover:scale-105">
+            <Button className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-8 py-2 rounded-lg transform transition-all hover:scale-105 cursor-pointer">
               Start Coding Now
             </Button>
           </Link>
