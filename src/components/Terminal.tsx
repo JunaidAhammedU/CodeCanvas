@@ -15,6 +15,8 @@ export const Terminal: FC = () => {
                 {output.length === 0 ? (
                     <div className="text-muted-foreground italic">
                         Output will appear here when you run your code...
+                        <br />
+                        Press {navigator.platform.includes('Mac') ? '⌘' : 'Ctrl'} + S to execute.
                     </div>
                 ) : (
                     output.map((line, index) => (
